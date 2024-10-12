@@ -53,8 +53,8 @@ class BookShopCommand extends Command
                     if ($data !== null) {
                         if ($data) {
                             $moneyManager = MoneyManager::getInstance();
-                            if ($moneyManager->getMoney($player) < $cost) {
-                                $player->sendMessage($this->plugin->getMessage("command.insufficient-funds", ["{AMOUNT}" => round($cost - $moneyManager->getMoney($player), 2, PHP_ROUND_HALF_DOWN)]));
+                            if ($moneyManager->getBalance($player) < $cost) {
+                                $player->sendMessage($this->plugin->getMessage("command.insufficient-funds", ["{AMOUNT}" => round($cost - $moneyManager->getBalance($player), 2, PHP_ROUND_HALF_DOWN)]));
                                 return;
                             }
                             $item = VanillaItems::BOOK();
