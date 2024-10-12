@@ -8,5 +8,5 @@ depend: [PiggyCustomEnchants]
 website: "https://github.com/WavyCraftNetwork/PCEBookShop/"
 
 permissions:
-  pcebookshop.command:
+  pcebookshop.command.bookshop:
     default: true
