@@ -18,11 +18,6 @@ class PCEBookShop extends PluginBase
     /** @var array */
     public $enchantments = [];
 
-    /**
-     * @throws HookAlreadyRegistered
-     * @throws MissingProviderDependencyException
-     * @throws UnknownProviderException
-     */
     public function onEnable(): void
     {
         $this->saveResource("messages.yml");
