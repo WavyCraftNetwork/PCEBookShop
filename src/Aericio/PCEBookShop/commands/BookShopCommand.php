@@ -8,6 +8,7 @@ use Aericio\PCEBookShop\PCEBookShop;
 use DaPigGuy\PiggyCustomEnchants\utils\Utils;
 use jojoe77777\FormAPI\ModalForm;
 use jojoe77777\FormAPI\SimpleForm;
+use wavycraft\core\economy\MoneyManager;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
 use pocketmine\item\VanillaItems;
@@ -51,8 +52,8 @@ class BookShopCommand extends Command
                 $form = new ModalForm(function (Player $player, ?bool $data) use ($cost, $name, $type): void {
                     if ($data !== null) {
                         if ($data) {
-                            $economyProvider = $this->plugin->getEconomyProvider();
-                            if ($economyProvider->getMoney($player) < $cost) {
+                            $moneyManager = MoneyManager::getInstance();
+                            if ($moneyManager->getMoney($player) < $cost) {
                                 $player->sendMessage($this->plugin->getMessage("command.insufficient-funds", ["{AMOUNT}" => round($cost - $economyProvider->getMoney($player), 2, PHP_ROUND_HALF_DOWN)]));
                                 return;
                             }
@@ -62,7 +63,7 @@ class BookShopCommand extends Command
                             $item->getNamedTag()->setInt("pcebookshop", $type);
                             $inventory = $player->getInventory();
                             if ($inventory->canAddItem($item)) {
-                                $economyProvider->takeMoney($player, $cost);
+                                $moneyManager->removeMoney($player, $cost);
                                 $inventory->addItem($item);
                                 return;
                             }
