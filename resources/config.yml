@@ -1,11 +1,5 @@
 # PCEBookShop Configuration File
 
-economy:
-  # Possible Providers: economyapi, multieconomy, xp
-  provider: economyapi
-  # This is used for the MultiEconomy provider
-  multieconomy-currency: ""
-
 cost:
   # If you are using xp provider, 1 = 1 level of experience.
   common: 1000
