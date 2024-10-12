@@ -6,10 +6,6 @@ namespace Aericio\PCEBookShop;
 
 use Aericio\PCEBookShop\commands\BookShopCommand;
 use Aericio\PCEBookShop\utils\Utils;
-use DaPigGuy\libPiggyEconomy\exceptions\MissingProviderDependencyException;
-use DaPigGuy\libPiggyEconomy\exceptions\UnknownProviderException;
-use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
-use DaPigGuy\libPiggyEconomy\providers\EconomyProvider;
 use DaPigGuy\PiggyCustomEnchants\CustomEnchantManager;
 use pocketmine\plugin\PluginBase;
 use pocketmine\utils\Config;
@@ -18,9 +14,6 @@ class PCEBookShop extends PluginBase
 {
     /** @var Config */
     private $messages;
-
-    /** @var EconomyProvider */
-    public $economyProvider;
 
     /** @var array */
     public $enchantments = [];
@@ -38,10 +31,7 @@ class PCEBookShop extends PluginBase
 
         $this->getServer()->getPluginManager()->registerEvents(new EventListener($this), $this);
 
-        libPiggyEconomy::init();
-        $this->economyProvider = libPiggyEconomy::getProvider($this->getConfig()->get("economy"));
-
-        $this->getServer()->getCommandMap()->register("pcebookshop", new BookShopCommand());
+        $this->getServer()->getCommandMap()->register("pcebookshop", new BookShopCommand($this));
 
         foreach (CustomEnchantManager::getEnchantments() as $enchants) {
             $excluded = $this->getConfig()->get("excluded-enchants", []);
@@ -54,11 +44,6 @@ class PCEBookShop extends PluginBase
     public function getMessage(string $key, array $tags = []): string
     {
         return Utils::translateColorTags(str_replace(array_keys($tags), $tags, $this->messages->getNested($key, $key)));
-    }
-
-    public function getEconomyProvider(): EconomyProvider
-    {
-        return $this->economyProvider;
     }
 
     public function getEnchantmentsByRarity(int $rarity): array
