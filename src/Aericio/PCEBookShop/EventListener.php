@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Aericio\PCEBookShop;
 
+use DaPigGuy\PiggyCustomEnchants\utils\Utils;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerInteractEvent;
 use pocketmine\item\enchantment\Enchantment;
