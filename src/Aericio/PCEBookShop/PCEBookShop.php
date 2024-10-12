@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Aericio\PCEBookShop;
 
 use Aericio\PCEBookShop\commands\BookShopCommand;
-use Aericio\PCEBookShop\tasks\CheckUpdatesTask;
 use Aericio\PCEBookShop\utils\Utils;
-use CortexPE\Commando\exception\HookAlreadyRegistered;
-use CortexPE\Commando\PacketHooker;
 use DaPigGuy\libPiggyEconomy\exceptions\MissingProviderDependencyException;
 use DaPigGuy\libPiggyEconomy\exceptions\UnknownProviderException;
 use DaPigGuy\libPiggyEconomy\libPiggyEconomy;
@@ -44,10 +41,7 @@ class PCEBookShop extends PluginBase
         libPiggyEconomy::init();
         $this->economyProvider = libPiggyEconomy::getProvider($this->getConfig()->get("economy"));
 
-        if (!PacketHooker::isRegistered()) PacketHooker::register($this);
-        $this->getServer()->getCommandMap()->register("pcebookshop", new BookShopCommand($this, "pcebookshop", "Opens the PiggyCustomEnchants Book Shop Menu", ["bookshop", "bs"]));
-
-        $this->getServer()->getAsyncPool()->submitTask(new CheckUpdatesTask());
+        $this->getServer()->getCommandMap()->register("pcebookshop", new BookShopCommand());
 
         foreach (CustomEnchantManager::getEnchantments() as $enchants) {
             $excluded = $this->getConfig()->get("excluded-enchants", []);
