@@ -5,27 +5,40 @@ declare(strict_types=1);
 namespace Aericio\PCEBookShop\commands;
 
 use Aericio\PCEBookShop\PCEBookShop;
-use CortexPE\Commando\BaseCommand;
 use DaPigGuy\PiggyCustomEnchants\utils\Utils;
 use jojoe77777\FormAPI\ModalForm;
 use jojoe77777\FormAPI\SimpleForm;
+use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\item\Item;
-use pocketmine\Player;
+use pocketmine\item\VanillaItems;
+use pocketmine\player\Player;
 use pocketmine\utils\TextFormat;
 
-class BookShopCommand extends BaseCommand
+class BookShopCommand extends Command
 {
     /** @var PCEBookShop */
     protected $plugin;
 
-    public function onRun(CommandSender $sender, string $aliasUsed, array $args): void
+    public function __construct(PCEBookShop $plugin)
     {
+        $this->plugin = $plugin;
+        parent::__construct("bookshop", "Open the book shop", "/bookshop");
+        $this->setPermission("pcebookshop.command.bookshop");
+    }
+
+    public function execute(CommandSender $sender, string $commandLabel, array $args): bool
+    {
+        if (!$this->testPermission($sender)) {
+            return false;
+        }
+
         if (!$sender instanceof Player) {
             $sender->sendMessage($this->plugin->getMessage("command.use-in-game"));
-            return;
+            return false;
         }
+
         $this->sendShopForm($sender);
+        return true;
     }
 
     public function sendShopForm(Player $player): void
@@ -43,7 +56,7 @@ class BookShopCommand extends BaseCommand
                                 $player->sendMessage($this->plugin->getMessage("command.insufficient-funds", ["{AMOUNT}" => round($cost - $economyProvider->getMoney($player), 2, PHP_ROUND_HALF_DOWN)]));
                                 return;
                             }
-                            $item = Item::get(Item::BOOK);
+                            $item = VanillaItems::BOOK();
                             $item->setCustomName(TextFormat::RESET . $this->plugin->getMessage("item.name", ["{COLOR_RARITY}" => Utils::getColorFromRarity($type), "{ENCHANTMENT}" => $name]) . TextFormat::RESET);
                             $item->setLore([$this->plugin->getMessage("item.lore")]);
                             $item->getNamedTag()->setInt("pcebookshop", $type);
@@ -73,11 +86,5 @@ class BookShopCommand extends BaseCommand
             $form->addButton($this->plugin->getMessage("menu.button", ["{RARITY_COLOR}" => Utils::getColorFromRarity($rarity), "{ENCHANTMENT}" => $name, "{AMOUNT}" => round($cost, 2, PHP_ROUND_HALF_DOWN)]));
         }
         $player->sendForm($form);
-        return;
-    }
-
-    protected function prepare(): void
-    {
-        $this->setPermission("pcebookshop.command.bookshop");
     }
 }
