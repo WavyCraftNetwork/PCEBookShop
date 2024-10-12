@@ -1,21 +1,12 @@
 name: PCEBookShop
 main: Aericio\PCEBookShop\PCEBookShop
-version: 1.0.3
-api: 3.11.2
-load: POSTWORLD
+version: 1.0.4
+api: 5.0.0
 author: Aericio
+authors: ["WavyCraftNetwork"]#Dont be a smart ass and put your name if you did nothing/barely anything!
 depend: [PiggyCustomEnchants]
-soft-depend: [EconomyAPI, MultiEconomy]
-website: "https://github.com/Aericio/PCEBookShop/"
+website: "https://github.com/WavyCraftNetwork/PCEBookShop/"
+
 permissions:
-  pcebookshop:
-    default: op
-    description: "Allows usage of all PCEBookShop features"
-    children:
-      pcebookshop.command:
-        default: op
-        description: "Allows usage of all PCEBookShop commands"
-        children:
-          pcebookshop.command.bookshop:
-            default: true
-            description: "Allows usage of the /pcebookshop command"
+  pcebookshop.command:
+    default: true
